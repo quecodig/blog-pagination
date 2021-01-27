@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Blog</title>
+</head>
+<body>
+	<div class="container">
+		<h1 class="mb-1"><%= article.title %></h1>
+		<div class="text-muted mb-2">
+			<%= article.createdAt.toLocaleDateString() %>
+		</div>
+		<a href="/" class="btn btn-secondary">All Articles</a>
+		<a href="/blog/edit/<%= article.id %>" class="btn btn-info">Edit</a>
+
+		<div>
+			<%- article.sanitizedHtml %>
+		</div>
+	</div>
+	<script>
+		const marked = require('marked')
+		const hljs = require("highlight.js");
+		const javascript = require('highlight.js/lib/languages/javascript');
+		import 'highlight.js/styles/monokai-sublime.css';
+
+		export default {
+			name: "height",
+			data(){
+				return {
+					code:'```javascript\nfunction(){\n\tconsole.log(123)\n}\n```'
+				}
+			},
+			mounted(){
+				marked.setOptions({
+					renderer: new marked.Renderer(),
+					highlight: function(code) {
+						return hljs.highlightAuto(code).value;
+					},
+					pedantic: false,
+					gfm: true,
+					tables: true,
+					breaks: false,
+					sanitize: false,
+					smartLists: true,
+					smartypants: false,
+					xhtml: false
+				}
+				);
+				this.code = marked(this.code)
+			},
+		}
+	</script>
+</body>
+</html>
